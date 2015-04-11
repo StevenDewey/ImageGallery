@@ -97,3 +97,77 @@
 
 				$filename = $imageID.".".$file_ext;
 				
+				copy($image)['tmp_name'],"gallery_images/".$filename);
+
+				//Get the Name Suffic on basis of the mime type
+				$function_suffix = strtoupper($file_ext);
+				//Build Function name for ImageCreateFromSUFFIX
+				$function_to_read = 'ImageCreateFrom' . $function_suffix;
+				//Build Function name for ImageSUFFIX
+				$function_to_write = 'Image' . $function_suffix;
+
+				//Get uploaded image dimensions
+				$size = GetImageSize("gallery_images" . $filename);
+					if($size[0] > $size[1]):
+						//Thumbnail size formula for wide images
+						$thumbnail_width = 200;
+						$thumbnail_height = (int)(200 * $size[1] / $size[0]);
+					else:
+						//Thumbnail size formula for wide images
+						$thumbnail_width = (int)(200 * $size[0] / $size[1]);
+						$thumbnail_height = 200;
+					endif;
+
+				$source_handle = $function_to_read("gallery_images/" .$filename);
+				if ($source_handle):
+					//Let's create a blank image for the thumbnail
+					$destination_handle = 
+						ImageCreateTrueColor($thumbnail_width, $thumbnail_height);
+
+					//Now we resize it 
+					ImageCopyResampled($destination_handle, $source_handle,
+						0, 0, 0, 0, $thumbnail_width, $thumbnail_height, $size[0], $size[1]);
+				endif;
+
+				// Let's save the thumbnail
+				$function_to_write($destination_handle, "gallery_images/tb_" . $filename);
+
+				header("location: gallery.php");
+
+				$newImage->close();
+				endif;
+			}
+
+			static function galleryDisplay() {
+				self::initializeDB();
+
+				$query = "
+					SELECT
+						id, caption, extension
+					FROM
+						gallery_images
+					ORDER BY
+						id ASC
+				";
+
+				if ($galleryImages = self::$database->prepare($query)):
+					$galleryImages->execute();
+					$galleryImages->store_result();
+					$galleryImages->bind_result($id,$caption,$extension);
+
+						if ( $galleryImages->num_rows == 0 ):
+							echo "<p class='error'>No images currently in the gallery.</p>";
+						else:
+							while( $galleryImages->fetch()):
+								echo "
+									<figure>
+										<img src='gallery_images/tb_$id.$extension' alt='$caption' />
+										<figcaption>$caption</figcaption>
+									<figure>
+								";
+							endwhile;
+						endif;
+					endif;
+				}
+	}
+?>
