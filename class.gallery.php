@@ -14,6 +14,7 @@
 
 		static function initializeDB() {
 			self::initializeDB();
+		}
 
 		static function login($user,$password) {
 			self::initializeDB();
@@ -55,9 +56,44 @@
 			else:
 				echo '<p>Problem preparing your database query.</p>'
 			endif;
-
-			static
-
 		}
-	}
- ?>
+
+		static function logout() {
+			unset($_SESSION["login"]);
+
+			header("location: index.php");
+		}
+
+		static function filetypeCheck($filetype) {
+			if ( array_key_exists($filetype, self::$imageTypes) ):
+				return true;
+			else:
+				return false;
+			endif;
+		}
+
+		static function newGalleryImage($image,$caption) {
+			self::initializeDB();
+
+			$insert_query = "
+				INSERT INTO
+					gallery_images
+					(caption, extension)
+				VALUES
+					(?,?)
+			";
+
+			$file_ext = self::$imageTypes[$image['type']];
+
+			if ( $newImage = self::$database->prepare($insert_query) ):
+				$newImage->bind_param(
+					'ss',
+					$caption, $file_ext
+				);
+
+				$newImage->execute();
+
+				$imageID = self::$database->insert_id;
+
+				$filename = $imageID.".".$file_ext;
+				
