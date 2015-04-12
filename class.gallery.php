@@ -1,10 +1,19 @@
 <?php
 	session_start();
 
-	require_once 'class.Database.php';
-
 	class Gallery {
+
 		private static $database;
+
+		public function initializeDB() {
+			# New mysqli Object for database communication
+			self::$database = new mysqli("localhost", "tardissh_kles", "8608!", "tardissh_lestarge");
+
+			# Kill the page is there was a problem with the database connection
+			if ( self::$database->connect_error ):
+				die( "Connection Error! Error: " . $this->database->connect_error );
+			endif;
+		}
 
 		private static $imageTypes = array(
 			'image/jpeg' => "jpeg",
@@ -12,9 +21,9 @@
 			'image/png' => "png",
 		);
 
-		static function initializeDB() {
-			self::initializeDB();
-		}
+		// static function initializeDB() {
+		// 	self::initializeDB();
+		// }
 
 		static function login($user,$password) {
 			self::initializeDB();
@@ -54,7 +63,7 @@
 					$loginStatus->close();
 				endif;
 			else:
-				echo '<p>Problem preparing your database query.</p>'
+				echo '<p>Problem preparing your database query.</p>';
 			endif;
 		}
 
@@ -97,7 +106,7 @@
 
 				$filename = $imageID.".".$file_ext;
 				
-				copy($image)['tmp_name'],"gallery_images/".$filename);
+				copy($image['tmp_name'],"gallery_images/".$filename);
 
 				//Get the Name Suffic on basis of the mime type
 				$function_suffix = strtoupper($file_ext);
@@ -150,7 +159,7 @@
 						id ASC
 				";
 
-				if ($galleryImages = self::$database->prepare($query)):
+				if ( $galleryImages = self::$database->prepare($query) ):
 					$galleryImages->execute();
 					$galleryImages->store_result();
 					$galleryImages->bind_result($id,$caption,$extension);
