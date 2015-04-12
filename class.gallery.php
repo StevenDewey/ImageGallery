@@ -175,10 +175,14 @@
 						else:
 							while( $galleryImages->fetch()):
 								echo "
-									<figure>
-										<img src='gallery_images/$id.$extension' alt='$caption' />
-										<figcaption>$caption</figcaption>
-									<figure>
+
+									<a href='fullimage.php?id=$id&extension=$extension'>
+										<figure>
+											<img src='gallery_images/tb_$id.$extension' alt='$caption' /> <!--I HAD TO DELETE THE tb_ IN ORDER FOR THE IMG TO DISPLAY-->
+											<figcaption>$caption</figcaption>
+										<figure>
+									</a>
+
 								";
 							endwhile;
 						endif;
