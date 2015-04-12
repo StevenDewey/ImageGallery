@@ -173,10 +173,12 @@
 						else:
 							while( $galleryImages->fetch()):
 								echo "
-									<figure>
-										<img src='gallery_images/tb_$id.$extension' alt='$caption' />
-										<figcaption>$caption</figcaption>
-									<figure>
+									<a href='fullimage.php?id=$id&extension=$extension'>
+										<figure>
+											<img src='gallery_images/tb_$id.$extension' alt='$caption' />
+											<figcaption>$caption</figcaption>
+										<figure>
+									</a>
 								";
 							endwhile;
 						endif;
