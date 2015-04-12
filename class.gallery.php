@@ -74,13 +74,13 @@
 		}
 
 		static function filetypeCheck($filetype) {
-			echo "got here!33333333";
-			echo $filetype;
+			echo "got here!33333333<br>";
+			echo $filetype . "<br>";
 			if ( array_key_exists($filetype, self::$imageTypes) ):
-				echo "got here!44444444";
+				echo "got here!44444444<br>";
 				return true;
 			else:
-				echo "got here!55555555";
+				echo "got here!55555555<br>";
 				return false;
 			endif;
 		}
@@ -107,48 +107,50 @@
 				$newImage->execute();
 
 				$imageID = self::$database->insert_id;
+				echo $imageID;
 
 				$filename = $imageID.".".$file_ext;
 				
 				copy($image['tmp_name'],"gallery_images/".$filename);
 
-				//Get the Name Suffic on basis of the mime type
-				$function_suffix = strtoupper($file_ext);
-				//Build Function name for ImageCreateFromSUFFIX
-				$function_to_read = 'ImageCreateFrom' . $function_suffix;
-				//Build Function name for ImageSUFFIX
-				$function_to_write = 'Image' . $function_suffix;
-
-				//Get uploaded image dimensions
-				$size = GetImageSize("gallery_images" . $filename);
-					if($size[0] > $size[1]):
-						//Thumbnail size formula for wide images
-						$thumbnail_width = 200;
-						$thumbnail_height = (int)(200 * $size[1] / $size[0]);
-					else:
-						//Thumbnail size formula for wide images
-						$thumbnail_width = (int)(200 * $size[0] / $size[1]);
-						$thumbnail_height = 200;
-					endif;
-
-				$source_handle = $function_to_read("gallery_images/" .$filename);
-				if ($source_handle):
-					//Let's create a blank image for the thumbnail
-					$destination_handle = 
-						ImageCreateTrueColor($thumbnail_width, $thumbnail_height);
-
-					//Now we resize it 
-					ImageCopyResampled($destination_handle, $source_handle,
-						0, 0, 0, 0, $thumbnail_width, $thumbnail_height, $size[0], $size[1]);
-				endif;
-
-				// Let's save the thumbnail
-				$function_to_write($destination_handle, "gallery_images/tb_" . $filename);
-
-				header("location: gallery.php");
+#				//Get the Name Suffix on basis of the mime type
+#				$function_suffix = strtoupper($file_ext);
+#				//Build Function name for ImageCreateFromSUFFIX
+#				$function_to_read = 'ImageCreateFrom' . $function_suffix;
+#				//Build Function name for ImageSUFFIX
+#				$function_to_write = 'Image' . $function_suffix;
+#
+#				//Get uploaded image dimensions
+#				$size = GetImageSize("gallery_images" . $filename);
+#					if($size[0] > $size[1]):
+#						//Thumbnail size formula for wide images
+#						$thumbnail_width = 200;
+#						$thumbnail_height = (int)(200 * $size[1] / $size[0]);
+#					else:
+#						//Thumbnail size formula for wide images
+#						$thumbnail_width = (int)(200 * $size[0] / $size[1]);
+#						$thumbnail_height = 200;
+#					endif;
+#
+#				$source_handle = $function_to_read("gallery_images/" .$filename);
+#				if ($source_handle):
+#					//Let's create a blank image for the thumbnail
+#					$destination_handle = 
+#						ImageCreateTrueColor($thumbnail_width, $thumbnail_height);
+#
+#					//Now we resize it 
+#					ImageCopyResampled($destination_handle, $source_handle,
+#						0, 0, 0, 0, $thumbnail_width, $thumbnail_height, $size[0], $size[1]);
+#				endif;
+#
+#				// Let's save the thumbnail
+#				$function_to_write($destination_handle, "gallery_images/tb_" . $filename);
+#
+#				header("location: gallery.php");
 
 				$newImage->close();
 				endif;
+				echo $imageID;
 			}
 
 			static function galleryDisplay() {
@@ -173,12 +175,14 @@
 						else:
 							while( $galleryImages->fetch()):
 								echo "
+
 									<a href='fullimage.php?id=$id&extension=$extension'>
 										<figure>
-											<img src='gallery_images/tb_$id.$extension' alt='$caption' />
+											<img src='gallery_images/tb_$id.$extension' alt='$caption' /> <!--I HAD TO DELETE THE tb_ IN ORDER FOR THE IMG TO DISPLAY-->
 											<figcaption>$caption</figcaption>
 										<figure>
 									</a>
+
 								";
 							endwhile;
 						endif;

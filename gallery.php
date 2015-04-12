@@ -14,15 +14,31 @@
 			header("location: index.php");
 		}
 	}
-	if (isset($_POST["image"])) { #gets file type
-		$fileName = $_POST["image"];
-		echo "got here!2222222222";
-		$fileArray = explode(".",$fileName);
-		$extensionType = "image/".$fileArray[1];
-		echo $extensionType;
+	
+	if (isset($_FILES["image"])) { #gets file type
+		$target_dir = "gallery_images/";
+		$target_file = $target_dir . basename($_FILES["image"]["name"]);
+		$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
+		echo $imageFileType . "<br>";
+		#$something = $_FILES["image"]["tmp_name"];
+		#echo $something . "<br>";
+		#echo "got here!2222222222<br>";
+		$fileName = $_FILES["image"]["name"];
+		echo "got here!2222222222<br>";
+		#$fileArray = explode(".",$fileName);
+		#$extension = $fileArray[1];
+		$extensionType = "image/".$imageFileType;
+		echo $extensionType . "<br>";
+		if($extensionType == "image/jpg"){
+			$extensionType = "image/jpeg";
+		}
 		if($Gallery->filetypeCheck($extensionType)){
 			echo "TRUEEEEEE";
-		};
+			$Gallery->newGalleryImage($_FILES["image"], $_POST["caption"]);
+		}
+		else{
+			echo "<h1>YOU SHALL NOT PAAAAASSSS!!!!!!!!!</h1>";
+		}
 	} 
 	
 	
@@ -41,9 +57,9 @@
 
 	<h1>Before image is displayed</h1>
 
-	<form  action="gallery.php" method="post">
-		<input type='text' name='caption' placeholder="Caption" />
-		<input type='file' name='image' />
+	<form  action="gallery.php" method="post" enctype="multipart/form-data">
+		<input type='text' name='caption' placeholder="Caption">
+		<input type='file' name="image" id="image">
 		<input type="submit" name="submit" value="Upload File"> 
 	</form>
 	
