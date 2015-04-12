@@ -74,9 +74,13 @@
 		}
 
 		static function filetypeCheck($filetype) {
+			echo "got here!33333333";
+			echo $filetype;
 			if ( array_key_exists($filetype, self::$imageTypes) ):
+				echo "got here!44444444";
 				return true;
 			else:
+				echo "got here!55555555";
 				return false;
 			endif;
 		}
