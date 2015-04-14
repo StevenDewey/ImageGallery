@@ -173,18 +173,21 @@
 						else:
 							while( $galleryImages->fetch()):
 								echo "
-
-									<a href='fullimage.php?id=$id&extension=$extension'>
-										<figure>
-											<img src='gallery_images/tb_$id.$extension' alt='$caption' /> <!--I HAD TO DELETE THE tb_ IN ORDER FOR THE IMG TO DISPLAY-->
-											<figcaption>$caption</figcaption>
-										<figure>
-									</a>
-										<form  action='gallery.php' method='post'>
-											<input type='hidden' name='ID' value='$id' />
-											<input type='hidden' name='fileName' value='$id.$extension' />
-											<input type='submit' name='Delete' value='Delete'> 
-										</form>
+									<div class='image'>
+											<a href='fullimage.php?id=$id&extension=$extension'>
+												<img src='gallery_images/tb_$id.$extension' alt='$caption' /> 
+											</a>
+											<form action='gallery.php' method='post'>
+												<input type='hidden' name='ID' value='$id' />
+												<input class='inputBox' type='text' name='caption' value='$caption'>
+											</form>
+											<form  action='gallery.php' method='post'>
+												<input type='hidden' name='ID' value='$id' />
+												<input type='hidden' name='fileName' value='$id.$extension' />
+												<input type='submit' name='Delete' value='Delete'> 
+											</form>
+									<div>
+										
 								";
 							endwhile;
 						endif;
