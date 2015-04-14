@@ -197,7 +197,8 @@
 					# Edit an existing Caption
 			public function editCaption($id, $caption) {
 				self::initializeDB();
-
+				echo "In function of edit";
+				echo $caption;
 				$update_query = "
 					UPDATE
 						gallery_images
@@ -210,7 +211,7 @@
 				
 				if ( $Caption_update = self::$database->prepare($update_query) ):
 					$Caption_update->bind_param(
-						's,i',
+						'si',
 						$caption, $id
 					);
 					
