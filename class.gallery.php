@@ -186,7 +186,7 @@
 												<input type='hidden' name='fileName' value='$id.$extension' />
 												<input type='submit' name='Delete' value='Delete'> 
 											</form>
-									<div>
+									</div>
 										
 								";
 							endwhile;
