@@ -74,13 +74,9 @@
 		}
 
 		static function filetypeCheck($filetype) {
-			echo "got here!33333333<br>";
-			echo $filetype . "<br>";
 			if ( array_key_exists($filetype, self::$imageTypes) ):
-				echo "got here!44444444<br>";
 				return true;
 			else:
-				echo "got here!55555555<br>";
 				return false;
 			endif;
 		}
@@ -113,40 +109,42 @@
 				
 				copy($image['tmp_name'],"gallery_images/".$filename);
 
-#				//Get the Name Suffix on basis of the mime type
-#				$function_suffix = strtoupper($file_ext);
-#				//Build Function name for ImageCreateFromSUFFIX
-#				$function_to_read = 'ImageCreateFrom' . $function_suffix;
-#				//Build Function name for ImageSUFFIX
-#				$function_to_write = 'Image' . $function_suffix;
-#
-#				//Get uploaded image dimensions
-#				$size = GetImageSize("gallery_images" . $filename);
-#					if($size[0] > $size[1]):
-#						//Thumbnail size formula for wide images
-#						$thumbnail_width = 200;
-#						$thumbnail_height = (int)(200 * $size[1] / $size[0]);
-#					else:
-#						//Thumbnail size formula for wide images
-#						$thumbnail_width = (int)(200 * $size[0] / $size[1]);
-#						$thumbnail_height = 200;
-#					endif;
-#
-#				$source_handle = $function_to_read("gallery_images/" .$filename);
-#				if ($source_handle):
-#					//Let's create a blank image for the thumbnail
-#					$destination_handle = 
-#						ImageCreateTrueColor($thumbnail_width, $thumbnail_height);
-#
-#					//Now we resize it 
-#					ImageCopyResampled($destination_handle, $source_handle,
-#						0, 0, 0, 0, $thumbnail_width, $thumbnail_height, $size[0], $size[1]);
-#				endif;
-#
-#				// Let's save the thumbnail
-#				$function_to_write($destination_handle, "gallery_images/tb_" . $filename);
-#
-#				header("location: gallery.php");
+				//Get the Name Suffix on basis of the mime type
+				$function_suffix = strtoupper($file_ext);
+				//Build Function name for ImageCreateFromSUFFIX
+				$function_to_read = 'ImageCreateFrom' . $function_suffix;
+				//Build Function name for ImageSUFFIX
+				$function_to_write = 'Image' . $function_suffix;
+
+				//Get uploaded image dimensions
+				$size = GetImageSize("gallery_images/" . $filename);
+					if($size[0] > $size[1]):
+						//Thumbnail size formula for wide images
+						$thumbnail_width = 200;
+						$thumbnail_height = (int)(200 * $size[1] / $size[0]);
+						echo "Landscape";
+					else:
+						//Thumbnail size formula for wide images
+						$thumbnail_width = (int)(200 * $size[0] / $size[1]);
+						$thumbnail_height = 200;
+						echo "Portrait";
+					endif;
+
+				$source_handle = $function_to_read("gallery_images/" .$filename);
+				if ($source_handle):
+					//Let's create a blank image for the thumbnail
+					$destination_handle = 
+						ImageCreateTrueColor($thumbnail_width, $thumbnail_height);
+
+					//Now we resize it 
+					ImageCopyResampled($destination_handle, $source_handle,
+						0, 0, 0, 0, $thumbnail_width, $thumbnail_height, $size[0], $size[1]);
+				endif;
+
+				// Let's save the thumbnail
+				$function_to_write($destination_handle, "gallery_images/tb_" . $filename);
+
+				header("location: gallery.php");
 
 				$newImage->close();
 				endif;
@@ -182,11 +180,44 @@
 											<figcaption>$caption</figcaption>
 										<figure>
 									</a>
-
+										<form  action='gallery.php' method='post'>
+											<input type='hidden' name='ID' value='$id' />
+											<input type='hidden' name='fileName' value='$id.$extension' />
+											<input type='submit' name='Delete' value='Delete'> 
+										</form>
 								";
 							endwhile;
 						endif;
 					endif;
 				}
+
+			# Delete an existing Item from the database
+			public function removeImage($id, $fileName) {
+				self::initializeDB();
+
+				$delete_query = "
+					DELETE FROM
+						gallery_images
+					WHERE 
+						id=?
+					LIMIT 1
+				";
+				
+				unlink("gallery_images/".$fileName);
+				unlink("gallery_images/tb_".$fileName);
+
+				if ( $ImageRemoval = self::$database->prepare($delete_query) ):
+					$ImageRemoval->bind_param(
+						'i',
+						$id
+					);
+					
+					$ImageRemoval->execute();
+					
+					$ImageRemoval->close();
+
+					header("location: index.php?success=delete");
+				endif;
+			}
 	}
 ?>
