@@ -14,6 +14,12 @@
 			header("location: index.php");
 		}
 	}
+
+	if (isset($_POST["Delete"])) {
+		echo "DELETING";
+		$Gallery->removeImage($_POST["ID"], $_POST["fileName"]);
+		header("location: gallery.php");
+	}
 	
 	if (isset($_FILES["image"])) { #gets file type
 		$target_dir = "gallery_images/";
@@ -29,7 +35,7 @@
 		#$extension = $fileArray[1];
 		$extensionType = "image/".$imageFileType;
 		echo $extensionType . "<br>";
-		if($extensionType == "image/jpg"){
+		if($extensionType == "image/jpg" or "image/JPG"){
 			$extensionType = "image/jpeg";
 		}
 		if($Gallery->filetypeCheck($extensionType)){
