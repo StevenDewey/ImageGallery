@@ -20,6 +20,12 @@
 		$Gallery->removeImage($_POST["ID"], $_POST["fileName"]);
 		header("location: gallery.php");
 	}
+
+	if (isset($_POST["caption"])) {
+		echo "Updating caption";
+		$Gallery->editCaption($_POST["ID"], $_POST["caption"]);
+		header("location: gallery.php");
+	}
 	
 	if (isset($_FILES["image"])) { #gets file type
 		$target_dir = "gallery_images/";

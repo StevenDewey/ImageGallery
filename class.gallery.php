@@ -194,6 +194,34 @@
 					endif;
 				}
 
+					# Edit an existing Caption
+			public function editCaption($id, $caption) {
+				self::initializeDB();
+
+				$update_query = "
+					UPDATE
+						gallery_images
+					SET
+						caption=?
+					WHERE
+						id=?
+					LIMIT 1
+				";
+				
+				if ( $Caption_update = self::$database->prepare($update_query) ):
+					$Caption_update->bind_param(
+						's,i',
+						$caption, $id
+					);
+					
+					$Caption_update->execute();
+					
+					$Caption_update->close();
+
+				endif;
+			}
+
+
 			# Delete an existing Item from the database
 			public function removeImage($id, $fileName) {
 				self::initializeDB();
@@ -219,7 +247,6 @@
 					
 					$ImageRemoval->close();
 
-					header("location: index.php?success=delete");
 				endif;
 			}
 	}
