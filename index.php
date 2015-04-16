@@ -54,24 +54,25 @@
 
 	<head>
 		<title>Gallery</title>
+		<link rel="stylesheet" type="text/css" href="style.css">
 	</head>
 
-	<body>
+	<body id="indexBody">
 		<!--<form  action="index.php" method="post">
 		<input type="text" name="logout" value="true" hidden>
 		<input type="submit" value="Logout">
 		</form>-->
-
-		<form  action="index.php" method="post">
-		Username:<br>
-		<input type="text" name="username" placeholder="Username">
-		<br>
-		Password:<br>
-		<input type="password" name="password" placeholder="Password">
-		<br><br>
-		<input type="submit" value="Submit">
-		</form>
-		
+		<div >
+			<form class="centerIndex" action="index.php" method="post">
+			Username:<br>
+			<input type="text" name="username" placeholder="Username">
+			<br>
+			Password:<br>
+			<input type="password" name="password" placeholder="Password">
+			<br><br>
+			<input type="submit" value="Submit">
+			</form>
+		</div>
 	</body>
 
 </html>
