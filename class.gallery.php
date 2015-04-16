@@ -7,7 +7,7 @@
 
 		public function initializeDB() {
 			# New mysqli Object for database communication
-			self::$database = new mysqli("localhost", "tardissh_kles", "8608!", "tardissh_lestarge");
+			self::$database = new mysqli("localhost", "tardissh_sdew", "3701!", "tardissh_dewey");
 
 			# Kill the page is there was a problem with the database connection
 			if ( self::$database->connect_error ):
@@ -120,13 +120,13 @@
 				$size = GetImageSize("gallery_images/" . $filename);
 					if($size[0] > $size[1]):
 						//Thumbnail size formula for wide images
-						$thumbnail_width = 200;
-						$thumbnail_height = (int)(200 * $size[1] / $size[0]);
+						$thumbnail_width = 300;
+						$thumbnail_height = (int)(300 * $size[1] / $size[0]);
 						echo "Landscape";
 					else:
 						//Thumbnail size formula for wide images
-						$thumbnail_width = (int)(200 * $size[0] / $size[1]);
-						$thumbnail_height = 200;
+						$thumbnail_width = (int)(300 * $size[0] / $size[1]);
+						$thumbnail_height = 300;
 						echo "Portrait";
 					endif;
 
@@ -148,7 +148,6 @@
 
 				$newImage->close();
 				endif;
-				echo $imageID;
 			}
 
 			static function galleryDisplay() {
@@ -173,19 +172,23 @@
 						else:
 							while( $galleryImages->fetch()):
 								echo "
-									<div class='image'>
-											<a href='fullimage.php?id=$id&extension=$extension'>
-												<img src='gallery_images/tb_$id.$extension' alt='$caption' /> 
-											</a>
-											<form action='gallery.php' method='post'>
-												<input type='hidden' name='ID' value='$id' />
-												<input class='inputBox' type='text' name='caption' value='$caption'>
-											</form>
-											<form  action='gallery.php' method='post'>
-												<input type='hidden' name='ID' value='$id' />
-												<input type='hidden' name='fileName' value='$id.$extension' />
-												<input type='submit' name='Delete' value='Delete'> 
-											</form>
+									<div class='image hvr-float-shadow'>
+											<div class='upperContent'>
+												<a href='fullimage.php?id=$id&extension=$extension'>
+													<img src='gallery_images/tb_$id.$extension' alt='$caption' /> 
+												</a>
+											</div>
+											<div class='lowerContent'>
+												<form class='caption' action='gallery.php' method='post'>
+													<input type='hidden' name='ID' value='$id' />
+													<input class='inputBox' type='text' name='caption' value='$caption'>
+												</form>
+												<form class='delete' action='gallery.php' method ='post'>
+													<input type='hidden' name='ID' value='$id' />
+													<input type='hidden' name='fileName' value='$id.$extension' />
+													<input type='image' src='trash2.png' title='Delete Picture' name='Delete' alt='submit' height='50' >
+												</form>
+											</div>
 									</div>
 										
 								";

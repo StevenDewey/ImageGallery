@@ -15,7 +15,7 @@
 		}
 	}
 
-	if (isset($_POST["Delete"])) {
+	if (isset($_POST["fileName"])) {
 		echo "DELETING";
 		$Gallery->removeImage($_POST["ID"], $_POST["fileName"]);
 		header("location: gallery.php");
@@ -62,18 +62,18 @@
 	<title></title>
 	<link rel="stylesheet" type="text/css" href="style.css">
 </head>
-<body>
-	<form  action="gallery.php" method="post">
+<body id="gallery">
+	<form id="logout" action="gallery.php" method="post">
 		<input type='hidden' name='ID' value="true" />
-		<input type="submit" name="logout" value="Logout"> 
+		<input class="btn" type="submit" name="logout" value="Logout"> 
 	</form>
 
-	<h1>Before image is displayed</h1>
-
-	<form  action="gallery.php" method="post" enctype="multipart/form-data">
-		<input type='text' name='caption' placeholder="Caption">
-		<input type='file' name="image" id="image">
-		<input type="submit" name="submit" value="Upload File"> 
+	<h1>Steven's Photo Gallery</h1>
+	
+	<form id="upload" action="gallery.php" method="post" enctype="multipart/form-data">
+		<input class="captionUpload" type='text' name='caption' placeholder="Caption">
+		<input class="btn" type='file' name="image" id="image">
+		<input class="btn" type="submit" name="submit" value="Upload File"> 
 	</form>
 	
 
@@ -84,7 +84,6 @@
 		?>
 	</div>
 
-		<h1>After image is displayed</h1>
 
 </body>
 </html>
